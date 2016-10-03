@@ -14,7 +14,7 @@ int main( int argc, char *argv[] )
     int potato=0;
     int temp;
 
-    if (rank == 0)
+    if (rank == 0)//master
     {
         potato = (rand() % 20) +5+ size;
         printf("Potato: %d\n\n", potato);
@@ -31,19 +31,19 @@ int main( int argc, char *argv[] )
         potato--;
         if (potato>0)
         {
+            int old=temp;
             temp= rand()%size;
             MPI_Send(&potato, 1, MPI_INT, temp, 0, MPI_COMM_WORLD);//send to random proccess 
-            printf("Thrown to procces:%d with potato of: %d\n", temp, potato);
+            printf("Node %d has the potato, passing to node %d \n", old, temp);
         }
         
         else if(potato==0)
         {
-            int stop=(-1);
             potato=-1;
             int i;
-            printf("GAME OVER\n");
+            printf("Node %d is it, game over",temp);
             for (i=0; i<size; i++)//for loop to end all the processes 
-            MPI_Send(&stop, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
+            MPI_Send(&potato, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
         }
     }
     MPI_Finalize();
