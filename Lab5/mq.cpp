@@ -5,6 +5,7 @@
 #include <string>
 #include <iostream>     // std::cout
 #include <fstream>      // std::ifstream
+#include <sstream>
 using namespace std;
 
 
@@ -14,6 +15,7 @@ int main(int argc, char *argv[])
   int rank, size;
   int i=1;
   int cities=1;
+  int city_matrix[10][10]={0};
 
    // int cities=1;
 
@@ -40,12 +42,47 @@ int main(int argc, char *argv[])
     }
     while (i<100)
     {
+
       i++;
       getline(infile,sLine);
-      cout<<sLine<<endl;
+        istringstream iss(sLine);
+      int j=0;
+      int temp_string[3];
+      while (iss) 
+      { 
+        string subs; 
+        iss >> subs; 
+       
+        if (j<3)
+        {
+          temp_string[j]=atoi(subs.c_str());
+           cout << "Substring: " << subs << endl;
+        }
+        j++;
+      }
+
+      if(city_matrix[temp_string[0]][temp_string[1]]==0)
+      {
+        city_matrix[temp_string[0]][temp_string[1]]=temp_string[2];
+       city_matrix[temp_string[1]][temp_string[0]]=temp_string[2];
+      }
+      else
+        cout<<"die";
+      //cout<<temp_string[0]<<"##################";
+      if (infile.eof())
+        break;
+     // cout<<sLine<<endl;
     }
     infile.close();
   }
+ for (int i = 0; i < 10; ++i)
+    {
+        for (int j = 0; j < 10; ++j)
+        {
+            std::cout << city_matrix[i][j] << ' ';
+        }
+        std::cout << std::endl;
+    }
 
 }
 
